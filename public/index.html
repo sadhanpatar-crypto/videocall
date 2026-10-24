@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1220">
+  <title>LiveCall — HD Video Calling</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></symbol>
+    <symbol id="i-mic-off" viewBox="0 0 24 24"><line x1="1" y1="1" x2="23" y2="23"/><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.94-.6"/><path d="M17 16.95A7 7 0 0 1 5 12v-2m14 0v2a7 7 0 0 1-.11 1.23"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></symbol>
+    <symbol id="i-cam" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></symbol>
+    <symbol id="i-cam-off" viewBox="0 0 24 24"><path d="M16 16v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2m5.66 0H14a2 2 0 0 1 2 2v3.34l1 1L23 7v10"/><line x1="1" y1="1" x2="23" y2="23"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+    <symbol id="i-flip" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></symbol>
+    <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></symbol>
+    <symbol id="i-video" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></symbol>
+  </defs>
+</svg>
+
+<!-- ============ AUTH ============ -->
+<main id="authView" class="auth">
+  <div class="auth-card">
+    <div class="brand">
+      <span class="brand-logo"><svg class="i"><use href="#i-video"/></svg></span>
+      <span class="brand-name">LiveCall</span>
+    </div>
+    <p class="tagline">Crystal-clear video calls with the people who are online right now.</p>
+
+    <div class="tabs" role="tablist">
+      <button type="button" class="tab active" data-mode="login">Login</button>
+      <button type="button" class="tab" data-mode="register">Create account</button>
+    </div>
+
+    <form id="authForm" novalidate>
+      <label class="field">
+        <span>Mobile number</span>
+        <input id="mobile" type="tel" inputmode="tel" autocomplete="username" placeholder="e.g. 9876543210" required>
+      </label>
+      <label class="field" id="nameField" hidden>
+        <span>Your name <small>(shown to others when you are online)</small></span>
+        <input id="name" type="text" autocomplete="name" maxlength="30" placeholder="e.g. Rahul Sharma">
+      </label>
+      <label class="field">
+        <span>Password</span>
+        <input id="password" type="password" autocomplete="current-password" minlength="6" placeholder="At least 6 characters" required>
+      </label>
+      <p id="authError" class="error" role="alert"></p>
+      <button id="authSubmit" class="btn primary block" type="submit">Login</button>
+    </form>
+  </div>
+</main>
+
+<!-- ============ APP ============ -->
+<div id="appView" hidden>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-logo sm"><svg class="i"><use href="#i-video"/></svg></span>
+      <span class="brand-name">LiveCall</span>
+    </div>
+    <div class="me">
+      <span class="avatar" id="meAvatar">?</span>
+      <div class="me-text">
+        <strong id="meName">—</strong>
+        <small id="meStatus"><span class="dot"></span> Online</small>
+      </div>
+      <button id="logoutBtn" class="icon-btn" title="Logout" aria-label="Logout"><svg class="i"><use href="#i-logout"/></svg></button>
+    </div>
+  </header>
+
+  <main class="content">
+    <div class="section-head">
+      <h2>People online</h2>
+      <span class="badge" id="onlineCount">0</span>
+    </div>
+    <ul id="userList" class="user-list"></ul>
+    <div id="emptyState" class="empty">
+      <div class="empty-icon"><svg class="i"><use href="#i-video"/></svg></div>
+      <h3>No one else is online yet</h3>
+      <p>Ask a friend to open this app and login. As soon as they are online, their name will appear here.</p>
+    </div>
+  </main>
+</div>
+
+<!-- ============ INCOMING CALL ============ -->
+<div id="incomingView" class="overlay incoming" hidden>
+  <div class="incoming-card">
+    <div class="pulse"><span class="avatar xl" id="incAvatar">?</span></div>
+    <h2 id="incName">—</h2>
+    <p>Incoming video call…</p>
+    <div class="row">
+      <button id="rejectBtn" class="round danger" aria-label="Decline"><svg class="i hang"><use href="#i-phone"/></svg></button>
+      <button id="acceptBtn" class="round success" aria-label="Accept"><svg class="i"><use href="#i-phone"/></svg></button>
+    </div>
+    <div class="row labels"><span>Decline</span><span>Accept</span></div>
+  </div>
+</div>
+
+<!-- ============ CALL ============ -->
+<div id="callView" class="overlay call" hidden>
+  <video id="remoteVideo" class="remote" autoplay playsinline></video>
+  <div id="remotePlaceholder" class="remote-placeholder">
+    <span class="avatar xl" id="peerAvatar">?</span>
+  </div>
+  <div class="call-top">
+    <strong id="peerName">—</strong>
+    <span id="callStatus">Calling…</span>
+  </div>
+  <video id="localVideo" class="local" autoplay playsinline muted></video>
+  <div class="controls">
+    <button id="muteBtn" class="round ctl" aria-label="Mute microphone"><svg class="i"><use href="#i-mic"/></svg></button>
+    <button id="camBtn" class="round ctl" aria-label="Turn camera off"><svg class="i"><use href="#i-cam"/></svg></button>
+    <button id="flipBtn" class="round ctl" aria-label="Switch camera"><svg class="i"><use href="#i-flip"/></svg></button>
+    <button id="hangBtn" class="round danger" aria-label="End call"><svg class="i hang"><use href="#i-phone"/></svg></button>
+  </div>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
